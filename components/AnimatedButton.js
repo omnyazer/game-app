@@ -1,9 +1,7 @@
-// components/AnimatedButton.js
 import React, { useRef } from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback, Animated } from 'react-native';
 
 export default function AnimatedButton({ action, onPress }) {
-  // Valeur animée pour l’opacité
   const opacity = useRef(new Animated.Value(1)).current;
 
   const onPressIn = () => {

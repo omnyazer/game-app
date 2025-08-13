@@ -1,14 +1,15 @@
-// screens/Game.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, StatusBar, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AnimatedButton from '../components/AnimatedButton';
 
 export default function Game() {
-  const [choice, setChoice] = useState(null);
-  const baseNumber = Math.floor(Math.random() * 100) + 1;
-  const score = Math.floor(Math.random() * 100) + 1;
   const navigation = useNavigation();
+
+  const baseNumber = useRef(Math.floor(Math.random() * 100) + 1).current;
+  const score = useRef(Math.floor(Math.random() * 100) + 1).current;
+
+  const [choice, setChoice] = useState(null); 
 
   useEffect(() => {
     if (!choice) return;
@@ -20,9 +21,23 @@ export default function Game() {
     Alert.alert(
       won ? "You've won" : "You've lost",
       `You scored: ${score}`,
-      [{ text: 'OK', onPress: () => navigation.goBack() }]
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            
+            navigation.navigate('Result', {
+              winner: won,
+              baseNumber,
+              score,
+            });
+            
+            setChoice(null);
+          },
+        },
+      ]
     );
-  }, [choice]);
+  }, [choice, navigation, baseNumber, score]);
 
   return (
     <View style={styles.container}>
