@@ -15,8 +15,7 @@ export default function Game() {
 
     const won =
       (choice === 'higher' && score > baseNumber) ||
-      (choice === 'looower' && score < baseNumber);
-
+      (choice === 'lower' && score < baseNumber);
     Alert.alert(
       won ? "You've won" : "You've lost",
       `baseNumber: ${baseNumber}\nscore: ${score}`,
