@@ -7,7 +7,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Result from './screens/Result';
 import Home from './screens/Home';
 import Game from './screens/Game';
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {

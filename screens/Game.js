@@ -10,28 +10,21 @@ export default function Game() {
   const score = useRef(Math.floor(Math.random() * 100) + 1).current;
 
   const [choice, setChoice] = useState(null); 
-
   useEffect(() => {
     if (!choice) return;
 
     const won =
       (choice === 'higher' && score > baseNumber) ||
-      (choice === 'lower' && score < baseNumber);
+      (choice === 'looower' && score < baseNumber);
 
     Alert.alert(
       won ? "You've won" : "You've lost",
-      `You scored: ${score}`,
+      `baseNumber: ${baseNumber}\nscore: ${score}`,
       [
         {
           text: 'OK',
           onPress: () => {
-            
-            navigation.navigate('Result', {
-              winner: won,
-              baseNumber,
-              score,
-            });
-            
+            navigation.navigate('Result', { winner: won, baseNumber, score });
             setChoice(null);
           },
         },
@@ -43,7 +36,6 @@ export default function Game() {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <Text style={styles.baseNumber}>Starting: {baseNumber}</Text>
-
       <AnimatedButton action="higher" onPress={() => setChoice('higher')} />
       <AnimatedButton action="lower" onPress={() => setChoice('lower')} />
     </View>
@@ -51,14 +43,6 @@ export default function Game() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  baseNumber: {
-    fontSize: 30,
-    marginBottom: 30,
-  },
+  container: { flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', padding: 16 },
+  baseNumber: { fontSize: 28, marginBottom: 24 },
 });

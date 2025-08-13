@@ -43,9 +43,12 @@ const styles = StyleSheet.create({
   button: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    padding: 15,
+    justifyContent: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 25,
     marginVertical: 15,
+    borderRadius: 10, 
+    minWidth: 120, 
   },
   buttonred: {
     backgroundColor: 'red',
@@ -55,7 +58,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 26,
+    fontSize: 20, 
     textTransform: 'capitalize',
+    fontWeight: '600',
   },
 });
