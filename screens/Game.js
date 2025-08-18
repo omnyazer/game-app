@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, StatusBar, Alert, Platform, Animated, Easing } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 import AnimatedButton from '../components/AnimatedButton';
 
 export default function Game() {
@@ -58,21 +59,29 @@ export default function Game() {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-          <View style={styles.titleStack} pointerEvents="none">
-      <Text style={[styles.title, styles.titleGlowOuter]}>
-        <Text style={styles.titleWhite}>LET'S </Text>
-        <Text style={styles.titleYellow}>PLAY</Text>
-      </Text>
-      <Text style={[styles.title, styles.titleGlowInner]}>
-        <Text style={styles.titleWhite}>LET'S </Text>
-        <Text style={styles.titleYellow}>PLAY</Text>
-      </Text>
-      <Text style={styles.titleTop}>
-        <Text style={styles.titleWhite}>LET'S </Text>
-        <Text style={styles.titleYellow}>PLAY</Text>
-      </Text>
-    </View>
+      <View style={styles.titleRow}>
+        <View style={styles.titleStack} pointerEvents="none">
+          <Text style={[styles.title, styles.titleGlowOuter]}>
+            <Text style={styles.titleWhite}>LET'S </Text>
+            <Text style={styles.titleYellow}>PLAY !</Text>
+          </Text>
+          <Text style={[styles.title, styles.titleGlowInner]}>
+            <Text style={styles.titleWhite}>LET'S </Text>
+            <Text style={styles.titleYellow}>PLAY !</Text>
+          </Text>
+          <Text style={styles.titleTop}>
+            <Text style={styles.titleWhite}>LET'S </Text>
+            <Text style={styles.titleYellow}>PLAY !</Text>
+          </Text>
+        </View>
 
+        <LottieView
+          autoPlay
+          loop
+          style={styles.titleAnim}
+          source={require('../assets/game.json')}
+        />
+      </View>
 
       <View style={styles.card}>
         <View style={styles.cardGlossTop} />
@@ -80,18 +89,13 @@ export default function Game() {
         <View style={styles.cardHalo} />
 
         <View style={styles.startingWrap}>
-          <Text style={[styles.startingLayer, styles.glowOuter]}>
-            <Text style={styles.startingLabel}>Starting: </Text>
-            <Text style={styles.startingNumberGlow}>{baseNumber}</Text>
-          </Text>
-          <Text style={[styles.startingLayer, styles.glowInner]}>
-            <Text style={styles.startingLabel}>Starting: </Text>
-            <Text style={styles.startingNumberGlow}>{baseNumber}</Text>
-          </Text>
-          <Text style={styles.startingTop}>
-            <Text style={styles.startingLabel}>Starting: </Text>
-            <Text style={styles.startingNumber}>{baseNumber}</Text>
-          </Text>
+          <Text style={styles.startingLabelSolo}>Starting</Text>
+
+          <View style={styles.numberStack} pointerEvents="none">
+            <Text style={[styles.numberLayer, styles.glowOuter]}>{baseNumber}</Text>
+            <Text style={[styles.numberLayer, styles.glowInner]}>{baseNumber}</Text>
+            <Text style={styles.numberTop}>{baseNumber}</Text>
+          </View>
         </View>
 
         <View style={styles.buttonsCol}>
@@ -127,9 +131,14 @@ export default function Game() {
       padding: 24,
     },
 
+    titleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+
+      marginBottom: 90, 
+    },
     titleStack: {
       alignItems: 'center',
-      marginBottom: 90,
       position: 'relative',
     },
     title: {
@@ -150,18 +159,23 @@ export default function Game() {
     },
     titleGlowOuter: {
       color: 'transparent',
-      textShadowColor: 'rgba(123,72,255,0.9)', 
+      textShadowColor: 'rgba(123,72,255,0.9)',
       textShadowOffset: { width: 0, height: 0 },
       textShadowRadius: 20,
     },
     titleGlowInner: {
       color: 'transparent',
-      textShadowColor: 'rgba(255,255,255,0.95)', 
+      textShadowColor: 'rgba(255,255,255,0.95)',
       textShadowOffset: { width: 0, height: 0 },
       textShadowRadius: 10,
     },
     titleYellow: { color: YELLOW },
     titleWhite:  { color: WHITE  },
+    titleAnim: {
+      width: 56,
+      height: 56,
+      marginLeft: 6,
+    },
 
     card: {
       width: '88%',
@@ -214,11 +228,24 @@ export default function Game() {
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: 24,
-      minHeight: 36,
     },
-    startingLayer: {
+    startingLabelSolo: {
+      fontSize: 23,
+      fontWeight: '900',
+      color: VIOLET,
+      marginBottom: 4,
+      textShadowColor: 'rgba(0,0,0,0.06)',
+      textShadowOffset: { width: 1, height: 2 },
+      textShadowRadius: 3,
+    },
+    numberStack: {
+      alignItems: 'center',
+      position: 'relative',
+      minHeight: 40,
+    },
+    numberLayer: {
       position: 'absolute',
-      fontSize: 24,
+      fontSize: 28,
       fontWeight: '900',
       letterSpacing: 0.5,
     },
@@ -234,22 +261,10 @@ export default function Game() {
       textShadowRadius: 10,
       color: 'transparent',
     },
-    startingTop: {
-      fontSize: 24,
+    numberTop: {
+      fontSize: 28,
       fontWeight: '900',
       letterSpacing: 0.5,
-      color: VIOLET,
-      textShadowColor: 'rgba(0,0,0,0.06)',
-      textShadowOffset: { width: 1, height: 2 },
-      textShadowRadius: 3,
-    },
-    startingLabel: {
-      color: VIOLET,
-    },
-    startingNumberGlow: {
-      color: WHITE,
-    },
-    startingNumber: {
       color: YELLOW,
       textShadowColor: 'rgba(255, 230, 120, 0.85)',
       textShadowOffset: { width: 0, height: 0 },
