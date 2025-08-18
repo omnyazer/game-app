@@ -6,8 +6,8 @@ export default function AnimatedButton({ action, onPress }) {
 
   const onPressIn = () => {
     Animated.timing(opacity, {
-      toValue: 0.6,
-      duration: 120,
+      toValue: 0.85,
+      duration: 90,
       useNativeDriver: true,
     }).start();
   };
@@ -15,21 +15,17 @@ export default function AnimatedButton({ action, onPress }) {
   const onPressOut = () => {
     Animated.timing(opacity, {
       toValue: 1,
-      duration: 120,
+      duration: 90,
       useNativeDriver: true,
     }).start();
   };
 
   return (
-    <TouchableWithoutFeedback
-      onPress={onPress}
-      onPressIn={onPressIn}
-      onPressOut={onPressOut}
-    >
+    <TouchableWithoutFeedback onPress={onPress} onPressIn={onPressIn} onPressOut={onPressOut}>
       <Animated.View
         style={[
           styles.button,
-          action === 'higher' ? styles.buttongreen : styles.buttonred,
+          action === 'higher' ? styles.buttongreen : styles.buttonpink,
           { opacity },
         ]}
       >
@@ -41,25 +37,35 @@ export default function AnimatedButton({ action, onPress }) {
 
 const styles = StyleSheet.create({
   button: {
-    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 15,
-    paddingHorizontal: 25,
-    marginVertical: 15,
-    borderRadius: 10, 
-    minWidth: 120, 
-  },
-  buttonred: {
-    backgroundColor: 'red',
+    paddingVertical: 14,
+    paddingHorizontal: 28,
+    marginVertical: 10,
+    borderRadius: 28,                 
+    minWidth: 150,
+    borderWidth: 3,                   
+    borderColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOpacity: 0.18,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 10,
+    elevation: 6,
   },
   buttongreen: {
-    backgroundColor: 'green',
+    backgroundColor: '#33D17A',     
+  },
+  buttonpink: {
+    backgroundColor: '#FF6EC7',      
   },
   buttonText: {
-    color: 'white',
-    fontSize: 20, 
-    textTransform: 'capitalize',
-    fontWeight: '600',
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: '800',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    textShadowColor: 'rgba(0,0,0,0.15)',
+    textShadowOffset: { width: 1, height: 2 },
+    textShadowRadius: 3,
   },
 });
