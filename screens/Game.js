@@ -12,6 +12,8 @@ export default function Game() {
 
   const floatHigher = useRef(new Animated.Value(0)).current;
   const floatLower  = useRef(new Animated.Value(0)).current;
+  const pressPulseHigher = useRef(new Animated.Value(0)).current;
+  const pressPulseLower  = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const makeLoop = (val) =>
@@ -53,6 +55,13 @@ export default function Game() {
         { text: 'OK', onPress: () => navigation.navigate('Result', { winner: won, baseNumber, score }) },
       ]);
     }
+  };
+
+  const pulse = (val) => {
+    Animated.sequence([
+      Animated.timing(val, { toValue: 1, duration: 80,  useNativeDriver: false }),
+      Animated.timing(val, { toValue: 0, duration: 120, useNativeDriver: false }),
+    ]).start();
   };
 
   return (
@@ -99,15 +108,47 @@ export default function Game() {
         </View>
 
         <View style={styles.buttonsCol}>
-          <Animated.View style={[styles.buttonGlowWrap, styles.glowGreen, { transform: [{ translateY: floatHigher }] }]}>
+          <Animated.View
+            style={[
+              styles.buttonGlowWrap,
+              styles.glowGreen,
+              {
+                transform: [
+                  { translateY: floatHigher },
+                  { scale: pressPulseHigher.interpolate({ inputRange: [0, 1], outputRange: [1, 0.98] }) },
+                ],
+                shadowRadius:  pressPulseHigher.interpolate({ inputRange: [0, 1], outputRange: [18, 26] }),
+                shadowOpacity: pressPulseHigher.interpolate({ inputRange: [0, 1], outputRange: [0.7, 0.9] }),
+              },
+            ]}
+          >
             <View style={styles.buttonScale}>
-              <AnimatedButton action="higher" onPress={() => handlePress('higher')} />
+              <AnimatedButton
+                action="higher"
+                onPress={() => { pulse(pressPulseHigher); handlePress('higher'); }}
+              />
             </View>
           </Animated.View>
 
-          <Animated.View style={[styles.buttonGlowWrap, styles.glowPink, { transform: [{ translateY: floatLower }] }]}>
+          <Animated.View
+            style={[
+              styles.buttonGlowWrap,
+              styles.glowPink,
+              {
+                transform: [
+                  { translateY: floatLower },
+                  { scale: pressPulseLower.interpolate({ inputRange: [0, 1], outputRange: [1, 0.98] }) },
+                ],
+                shadowRadius:  pressPulseLower.interpolate({ inputRange: [0, 1], outputRange: [18, 26] }),
+                shadowOpacity: pressPulseLower.interpolate({ inputRange: [0, 1], outputRange: [0.7, 0.9] }),
+              },
+            ]}
+          >
             <View style={styles.buttonScale}>
-              <AnimatedButton action="lower" onPress={() => handlePress('lower')} />
+              <AnimatedButton
+                action="lower"
+                onPress={() => { pulse(pressPulseLower); handlePress('lower'); }}
+              />
             </View>
           </Animated.View>
         </View>
@@ -116,188 +157,187 @@ export default function Game() {
   );
 }
 
-  const VIOLET = '#6B4CF6';
-  const WHITE  = '#FFFFFF';
-  const YELLOW = '#FFD43B';
-  const GREEN  = '#33D17A';
-  const PINK   = '#FF6EC7';
+const VIOLET = '#6B4CF6';
+const WHITE  = '#FFFFFF';
+const YELLOW = '#FFD43B';
+const GREEN  = '#33D17A';
+const PINK   = '#FF6EC7';
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: VIOLET,
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 24,
-    },
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: VIOLET,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+  },
 
-    titleRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 90,
+  },
+  titleStack: {
+    alignItems: 'center',
+    position: 'relative',
+  },
+  title: {
+    position: 'absolute',
+    textAlign: 'center',
+    fontSize: 40,
+    fontWeight: '900',
+    letterSpacing: 1.2,
+  },
+  titleTop: {
+    textAlign: 'center',
+    fontSize: 40,
+    fontWeight: '900',
+    letterSpacing: 1.2,
+    textShadowColor: 'rgba(0,0,0,0.25)',
+    textShadowOffset: { width: 2, height: 3 },
+    textShadowRadius: 6,
+  },
+  titleGlowOuter: {
+    color: 'transparent',
+    textShadowColor: 'rgba(123,72,255,0.9)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 20,
+  },
+  titleGlowInner: {
+    color: 'transparent',
+    textShadowColor: 'rgba(255,255,255,0.95)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
+  },
+  titleYellow: { color: YELLOW },
+  titleWhite:  { color: WHITE  },
+  titleAnim: {
+    width: 56,
+    height: 56,
+    marginLeft: 6,
+  },
 
-      marginBottom: 90, 
-    },
-    titleStack: {
-      alignItems: 'center',
-      position: 'relative',
-    },
-    title: {
-      position: 'absolute',
-      textAlign: 'center',
-      fontSize: 40,
-      fontWeight: '900',
-      letterSpacing: 1.2,
-    },
-    titleTop: {
-      textAlign: 'center',
-      fontSize: 40,
-      fontWeight: '900',
-      letterSpacing: 1.2,
-      textShadowColor: 'rgba(0,0,0,0.25)',
-      textShadowOffset: { width: 2, height: 3 },
-      textShadowRadius: 6,
-    },
-    titleGlowOuter: {
-      color: 'transparent',
-      textShadowColor: 'rgba(123,72,255,0.9)',
-      textShadowOffset: { width: 0, height: 0 },
-      textShadowRadius: 20,
-    },
-    titleGlowInner: {
-      color: 'transparent',
-      textShadowColor: 'rgba(255,255,255,0.95)',
-      textShadowOffset: { width: 0, height: 0 },
-      textShadowRadius: 10,
-    },
-    titleYellow: { color: YELLOW },
-    titleWhite:  { color: WHITE  },
-    titleAnim: {
-      width: 56,
-      height: 56,
-      marginLeft: 6,
-    },
+  card: {
+    width: '88%',
+    backgroundColor: WHITE,
+    borderRadius: 26,
+    borderWidth: 4,
+    borderColor: WHITE,
+    paddingVertical: 28,
+    paddingHorizontal: 20,
 
-    card: {
-      width: '88%',
-      backgroundColor: WHITE,
-      borderRadius: 26,
-      borderWidth: 4,
-      borderColor: WHITE,
-      paddingVertical: 28,
-      paddingHorizontal: 20,
+    shadowColor: '#FFFFFF',
+    shadowOpacity: 0.55,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 24,
+    elevation: 10,
 
-      shadowColor: '#FFFFFF',
-      shadowOpacity: 0.55,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 24,
-      elevation: 10,
+    alignItems: 'center',
+    position: 'relative',
+    overflow: 'visible',
+  },
+  cardGlossTop: {
+    position: 'absolute',
+    top: 10,
+    left: 18,
+    right: 18,
+    height: 12,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.8)',
+  },
+  cardGlossSide: {
+    position: 'absolute',
+    top: 30,
+    bottom: 30,
+    left: 12,
+    width: 8,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.35)',
+  },
+  cardHalo: {
+    position: 'absolute',
+    left: -10,
+    right: -10,
+    bottom: -10,
+    height: 20,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.25)',
+  },
 
-      alignItems: 'center',
-      position: 'relative',
-      overflow: 'visible',
-    },
-    cardGlossTop: {
-      position: 'absolute',
-      top: 10,
-      left: 18,
-      right: 18,
-      height: 12,
-      borderRadius: 8,
-      backgroundColor: 'rgba(255,255,255,0.8)',
-    },
-    cardGlossSide: {
-      position: 'absolute',
-      top: 30,
-      bottom: 30,
-      left: 12,
-      width: 8,
-      borderRadius: 8,
-      backgroundColor: 'rgba(255,255,255,0.35)',
-    },
-    cardHalo: {
-      position: 'absolute',
-      left: -10,
-      right: -10,
-      bottom: -10,
-      height: 20,
-      borderRadius: 20,
-      backgroundColor: 'rgba(255,255,255,0.25)',
-    },
+  startingWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  startingLabelSolo: {
+    fontSize: 23,
+    fontWeight: '900',
+    color: VIOLET,
+    marginBottom: 4,
+    textShadowColor: 'rgba(0,0,0,0.06)',
+    textShadowOffset: { width: 1, height: 2 },
+    textShadowRadius: 3,
+  },
+  numberStack: {
+    alignItems: 'center',
+    position: 'relative',
+    minHeight: 40,
+  },
+  numberLayer: {
+    position: 'absolute',
+    fontSize: 28,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+  },
+  glowOuter: {
+    textShadowColor: 'rgba(255, 230, 120, 0.95)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 18,
+    color: 'transparent',
+  },
+  glowInner: {
+    textShadowColor: 'rgba(255,255,255,0.9)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
+    color: 'transparent',
+  },
+  numberTop: {
+    fontSize: 28,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+    color: YELLOW,
+    textShadowColor: 'rgba(255, 230, 120, 0.85)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
+  },
 
-    startingWrap: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: 24,
-    },
-    startingLabelSolo: {
-      fontSize: 23,
-      fontWeight: '900',
-      color: VIOLET,
-      marginBottom: 4,
-      textShadowColor: 'rgba(0,0,0,0.06)',
-      textShadowOffset: { width: 1, height: 2 },
-      textShadowRadius: 3,
-    },
-    numberStack: {
-      alignItems: 'center',
-      position: 'relative',
-      minHeight: 40,
-    },
-    numberLayer: {
-      position: 'absolute',
-      fontSize: 28,
-      fontWeight: '900',
-      letterSpacing: 0.5,
-    },
-    glowOuter: {
-      textShadowColor: 'rgba(255, 230, 120, 0.95)',
-      textShadowOffset: { width: 0, height: 0 },
-      textShadowRadius: 18,
-      color: 'transparent',
-    },
-    glowInner: {
-      textShadowColor: 'rgba(255,255,255,0.9)',
-      textShadowOffset: { width: 0, height: 0 },
-      textShadowRadius: 10,
-      color: 'transparent',
-    },
-    numberTop: {
-      fontSize: 28,
-      fontWeight: '900',
-      letterSpacing: 0.5,
-      color: YELLOW,
-      textShadowColor: 'rgba(255, 230, 120, 0.85)',
-      textShadowOffset: { width: 0, height: 0 },
-      textShadowRadius: 10,
-    },
-
-    buttonsCol: {
-      width: '100%',
-      alignItems: 'center',
-      gap: 10,
-    },
-    buttonGlowWrap: {
-      width: '100%',
-      alignItems: 'center',
-    },
-    buttonScale: {
-      transform: [{ scale: 1.22 }],
-      alignSelf: 'center',
-    },
-    glowGreen: {
-      shadowColor: GREEN,
-      shadowOpacity: 0.7,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 18,
-      borderRadius: 22,
-      backgroundColor: 'transparent',
-    },
-    glowPink: {
-      shadowColor: PINK,
-      shadowOpacity: 0.7,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 18,
-      borderRadius: 22,
-      backgroundColor: 'transparent',
-    },
-  });
+  buttonsCol: {
+    width: '100%',
+    alignItems: 'center',
+    gap: 10,
+  },
+  buttonGlowWrap: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  buttonScale: {
+    transform: [{ scale: 1.22 }],
+    alignSelf: 'center',
+  },
+  glowGreen: {
+    shadowColor: GREEN,
+    shadowOpacity: 0.7,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 18,
+    borderRadius: 22,
+    backgroundColor: 'transparent',
+  },
+  glowPink: {
+    shadowColor: PINK,
+    shadowOpacity: 0.7,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 18,
+    borderRadius: 22,
+    backgroundColor: 'transparent',
+  },
+});
