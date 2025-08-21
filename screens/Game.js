@@ -12,8 +12,6 @@ export default function Game() {
 
   const floatHigher = useRef(new Animated.Value(0)).current;
   const floatLower  = useRef(new Animated.Value(0)).current;
-  const pressPulseHigher = useRef(new Animated.Value(0)).current;
-  const pressPulseLower  = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const makeLoop = (val) =>
@@ -32,7 +30,6 @@ export default function Game() {
     loop1.start();
     const delay = setTimeout(() => loop2.start(), 300);
 
-    
     return () => {
       loop1.stop();
       loop2.stop();
@@ -57,12 +54,7 @@ export default function Game() {
       ]);
     }
   };
-  const pulse = (val) => {
-    Animated.sequence([
-      Animated.timing(val, { toValue: 1, duration: 80,  useNativeDriver: false }),
-      Animated.timing(val, { toValue: 0, duration: 120, useNativeDriver: false }),
-    ]).start();
-  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -109,14 +101,13 @@ export default function Game() {
         <View style={styles.buttonsCol}>
           <Animated.View style={[styles.buttonGlowWrap, styles.glowGreen, { transform: [{ translateY: floatHigher }] }]}>
             <View style={styles.buttonScale}>
-              <AnimatedButton action="higher"onPress={() => { pulse(pressPulseHigher); handlePress('higher'); }} />
+              <AnimatedButton action="higher" onPress={() => handlePress('higher')} />
             </View>
           </Animated.View>
 
           <Animated.View style={[styles.buttonGlowWrap, styles.glowPink, { transform: [{ translateY: floatLower }] }]}>
             <View style={styles.buttonScale}>
-              <AnimatedButton action="lower" onPress={() => { pulse(pressPulseLower); handlePress('lower'); }}
- />
+              <AnimatedButton action="lower" onPress={() => handlePress('lower')} />
             </View>
           </Animated.View>
         </View>
